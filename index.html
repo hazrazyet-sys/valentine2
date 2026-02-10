@@ -176,7 +176,7 @@
 
 <!-- LOADING SCREEN -->
 <div id="loadingScreen">
-  <div id="loadingText">Loading something important… 💖</div>
+  <div id="loadingText">Loading... </div>
   <div class="barContainer">
     <div class="bar" id="loadingBar"></div>
   </div>
@@ -188,7 +188,7 @@
 
 <!-- MAIN CONTENT -->
 <div class="container" id="main">
-  <h1 id="mainText">Will you be my Valentine? 💝</h1>
+  <h1 id="mainText">Will you allow me the greatest joy of spending this valentines day with you?</h1>
 
   <div class="buttons">
     <button id="yesBtn">Yes</button>
@@ -240,7 +240,7 @@ window.onload = () => {
   /* ---------- PHASE 3: FULL STOP + TEXT ---------- */
   function pauseMoment() {
     loadingText.textContent =
-      "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
+      "Ambagal neto, bilisan natin";
 
     setTimeout(startShake, 3000);
   }
@@ -280,8 +280,8 @@ window.onload = () => {
   yesBtn.addEventListener("click", () => {
     main.innerHTML = `
       <div class="love-message">
-        <div class="thank-you">Thank you baby! 💖</div>
-        <div class="love-you">I love you so much</div>
+        <div class="thank-you">Thank you so much baby!</div>
+        <div class="love-you">I love you, always and forevermore!</div>
       </div>
     `;
     yesBtn.style.display = "none";
