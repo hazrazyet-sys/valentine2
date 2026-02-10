@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine 💘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Playfair Display", serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* ---------- LOADING SCREEN ---------- */
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #loadingText {
+      color: #b30059;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      text-align: center;
+      max-width: 80%;
+    }
+
+    .barContainer {
+      width: 80%;
+      height: 20px;
+      background: #ffd6e0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: #ff3366;
+      transition: width 0.4s ease;
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .container {
+      text-align: center;
+      z-index: 2;
+      display: none;
+    }
+
+    h1 {
+      color: #b30059;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+    .love-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .thank-you {
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #b30059;
+    }
+
+    .love-you {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #ff1f5a;
+      animation: gentlePulse 2.5s ease-in-out infinite;
+    }
+
+    .buttons {
+@@ -152,163 +153,177 @@
+    .shake-strong {
+      animation: shake 0.08s infinite;
+    }
+    @keyframes gentlePulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div id="loadingText">Loading something important… 💖</div>
+  <div class="barContainer">
+    <div class="bar" id="loadingBar"></div>
+  </div>
+</div>
+
+<audio id="loveMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9cde3d10b6.mp3" type="audio/mpeg">
+</audio>
+
+<!-- MAIN CONTENT -->
+<div class="container" id="main">
+  <h1 id="mainText">Will you be my Valentine? 💝</h1>
+
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
+</div>
+
+<script>
+window.onload = () => {
+  const bar = document.getElementById("loadingBar");
+  const loadingText = document.getElementById("loadingText");
+  const loadingScreen = document.getElementById("loadingScreen");
+  const main = document.getElementById("main");
+
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const mainText = document.getElementById("mainText");
+  const music = document.getElementById("loveMusic");
+
+  loadingScreen.style.display = "flex";
+  main.style.display = "none";
+
+  let progress = 0;
+
+  /* ---------- PHASE 1: NORMAL LOAD (3s) ---------- */
+  const fastLoad = setInterval(() => {
+    progress += 2;
+    bar.style.width = progress + "%";
+
+    if (progress >= 60) {
+      clearInterval(fastLoad);
+      slowLoad();
+    }
+  }, 100);
+
+  /* ---------- PHASE 2: SLOW CRAWL ---------- */
+  function slowLoad() {
+    const slow = setInterval(() => {
+      progress += 1;
+      bar.style.width = progress + "%";
+
+      if (progress >= 70) {
+        clearInterval(slow);
+        pauseMoment();
+      }
+    }, 300);
+  }
+
+  /* ---------- PHASE 3: FULL STOP + TEXT ---------- */
+  function pauseMoment() {
+    loadingText.textContent =
+      "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
+
+    setTimeout(startShake, 3000);
+  }
+
+  /* ---------- PHASE 4: SHAKE ESCALATION ---------- */
+  function startShake() {
+    bar.classList.add("shake-weak");
+
+    setTimeout(() => {
+      bar.classList.remove("shake-weak");
+      bar.classList.add("shake-medium");
+    }, 700);
+
+    setTimeout(() => {
+      bar.classList.remove("shake-medium");
+      bar.classList.add("shake-strong");
+    }, 1400);
+
+    setTimeout(() => {
+      bar.classList.remove("shake-strong");
+      bar.style.width = "100%";
+      finishLoading();
+    }, 2000);
+  }
+
+  /* ---------- PHASE 5: TRANSITION ---------- */
+  function finishLoading() {
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+      main.style.display = "block";
+    }, 300);
+  }
+
+  /* ---------- MAIN INTERACTIONS ---------- */
+  let noCount = 0;
+
+  yesBtn.addEventListener("click", () => {
+    main.innerHTML = `
+      <div class="love-message">
+        <div class="thank-you">Thank you baby! 💖</div>
+        <div class="love-you">I love you so much</div>
+      </div>
+    `;
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    music.play();
+    setInterval(createHeart, 250);
+  });
+
+  noBtn.addEventListener("click", () => {
+    noCount++;
+
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - btnWidth - 10;
+    const maxY = window.innerHeight - btnHeight - 10;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+
+    yesBtn.style.transform = `scale(${1 + noCount * 0.6})`;
+
+    if (noCount >= 3) {
+      yesBtn.style.position = "fixed";
+      yesBtn.style.inset = "0";
+      yesBtn.style.width = "100vw";
+      yesBtn.style.height = "100vh";
+      yesBtn.style.borderRadius = "0";
+      yesBtn.style.fontSize = "3rem";
+      noBtn.style.display = "none";
+    }
+  });
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 20 + 20 + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }
+};
+</script>
+
+
+</body>
+</html>
