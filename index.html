@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Be My Valentine 💘</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: "Playfair Display", serif;
+      font-family: "Comic Sans MS", cursive, sans-serif;
     }
 
     body {
@@ -69,44 +68,51 @@
       font-size: 2.5rem;
       margin-bottom: 30px;
     }
-    .love-message {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .thank-you {
-      font-size: 2.4rem;
-      font-weight: 600;
-      color: #b30059;
-    }
-
-    .love-you {
-      font-size: 3.2rem;
-      font-weight: 900;
-      color: #ff1f5a;
-      animation: gentlePulse 2.5s ease-in-out infinite;
-    }
 
     .buttons {
-@@ -152,163 +153,177 @@
-    .shake-strong {
-      animation: shake 0.08s infinite;
+      position: relative;
+      width: 250px;
+      height: 120px;
+      margin: auto;
     }
-    @keyframes gentlePulse {
-      0% {
-        transform: scale(1);
-        opacity: 0.9;
-      }
-      50% {
-        transform: scale(1.05);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 0.9;
-      }
+
+    button {
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+
+    #yesBtn {
+      background-color: #ff3366;
+      color: white;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    #noBtn {
+      background-color: white;
+      color: #ff3366;
+      top: 60px;
+      left: 80px;
+    }
+
+    /* ---------- HEARTS ---------- */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 5s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-110vh); opacity: 0; }
     }
   </style>
 </head>
@@ -135,93 +141,45 @@
 </div>
 
 <script>
-window.onload = () => {
+  /* ---------- LOADING LOGIC ---------- */
   const bar = document.getElementById("loadingBar");
   const loadingText = document.getElementById("loadingText");
   const loadingScreen = document.getElementById("loadingScreen");
   const main = document.getElementById("main");
 
+  let progress = 0;
+  const loadingInterval = setInterval(() => {
+    progress += 5;
+    bar.style.width = progress + "%";
+
+    if (progress >= 50) {
+      clearInterval(loadingInterval);
+
+      loadingText.textContent =
+        "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
+
+      setTimeout(() => {
+        bar.style.transition = "width 0.15s ease";
+        bar.style.width = "100%";
+      }, 800);
+
+      setTimeout(() => {
+        loadingScreen.style.display = "none";
+        main.style.display = "block";
+      }, 1200);
+    }
+  }, 150);
+
+  /* ---------- MAIN INTERACTIONS ---------- */
   const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
   const mainText = document.getElementById("mainText");
   const music = document.getElementById("loveMusic");
 
-  loadingScreen.style.display = "flex";
-  main.style.display = "none";
-
-  let progress = 0;
-
-  /* ---------- PHASE 1: NORMAL LOAD (3s) ---------- */
-  const fastLoad = setInterval(() => {
-    progress += 2;
-    bar.style.width = progress + "%";
-
-    if (progress >= 60) {
-      clearInterval(fastLoad);
-      slowLoad();
-    }
-  }, 100);
-
-  /* ---------- PHASE 2: SLOW CRAWL ---------- */
-  function slowLoad() {
-    const slow = setInterval(() => {
-      progress += 1;
-      bar.style.width = progress + "%";
-
-      if (progress >= 70) {
-        clearInterval(slow);
-        pauseMoment();
-      }
-    }, 300);
-  }
-
-  /* ---------- PHASE 3: FULL STOP + TEXT ---------- */
-  function pauseMoment() {
-    loadingText.textContent =
-      "I may be patient but I’m not the type to wait too long, so let’s speed it up 😌";
-
-    setTimeout(startShake, 3000);
-  }
-
-  /* ---------- PHASE 4: SHAKE ESCALATION ---------- */
-  function startShake() {
-    bar.classList.add("shake-weak");
-
-    setTimeout(() => {
-      bar.classList.remove("shake-weak");
-      bar.classList.add("shake-medium");
-    }, 700);
-
-    setTimeout(() => {
-      bar.classList.remove("shake-medium");
-      bar.classList.add("shake-strong");
-    }, 1400);
-
-    setTimeout(() => {
-      bar.classList.remove("shake-strong");
-      bar.style.width = "100%";
-      finishLoading();
-    }, 2000);
-  }
-
-  /* ---------- PHASE 5: TRANSITION ---------- */
-  function finishLoading() {
-    setTimeout(() => {
-      loadingScreen.style.display = "none";
-      main.style.display = "block";
-    }, 300);
-  }
-
-  /* ---------- MAIN INTERACTIONS ---------- */
   let noCount = 0;
 
   yesBtn.addEventListener("click", () => {
-    main.innerHTML = `
-      <div class="love-message">
-        <div class="thank-you">Thank you baby! 💖</div>
-        <div class="love-you">I love you so much</div>
-      </div>
-    `;
+    mainText.textContent = "Thank you baby! I love you so much 💖";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
     music.play();
@@ -231,14 +189,18 @@ window.onload = () => {
   noBtn.addEventListener("click", () => {
     noCount++;
 
+    // Safe movement bounds
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
     const maxX = window.innerWidth - btnWidth - 10;
     const maxY = window.innerHeight - btnHeight - 10;
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
 
     yesBtn.style.transform = `scale(${1 + noCount * 0.6})`;
 
@@ -262,9 +224,7 @@ window.onload = () => {
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 5000);
   }
-};
 </script>
-
 
 </body>
 </html>
